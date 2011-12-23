@@ -16,13 +16,10 @@ const bool fullscreen = true;		// Set whether this should run in fullscreen or n
 
 int main(int argc, char **argv)
 {
-<<<<<<< HEAD
-=======
 	bool keyboard[512];
 	for(int i = 0; i < 512; ++i)
 		keyboard[i] = false;
 	bool exit = false;
->>>>>>> 509b30421f90c574540548a4fcd025aea7b1d5a3
 	Renderer renderer(width, height, framerate, fov, Afilter, Aalias, fullscreen);
 	// If the renderer was not created properly, OH SHIT
 	if(!renderer.isOkay())
@@ -68,13 +65,8 @@ int main(int argc, char **argv)
 	glBindBuffer(GL_ARRAY_BUFFER, box.handle);				// Bind the VBO
 	glBufferData(GL_ARRAY_BUFFER, 14*box.numVerts*sizeof(float), vertices, GL_STATIC_DRAW);// and allocate its space
 
-<<<<<<< HEAD
-//	renderer.switchToPhong();							// Switch to the phong shader
-	renderer.switchToParallax();							// Switch to parallax shader
-=======
 	renderer.switchToPhong();							// Switch to the phong shader
 //	renderer.switchToParallax();							// Switch to parallax shader
->>>>>>> 509b30421f90c574540548a4fcd025aea7b1d5a3
 //	renderer.switchToToon();							// Switch to the toon shader (to test it)
 //	renderer.switchToGouraud();
 //	renderer.switchToGouraudToon();
@@ -116,36 +108,6 @@ int main(int argc, char **argv)
 	int lastRefresh = 0;
 	int i = 0;
 
-<<<<<<< HEAD
-	while(!(device.getButtonState(EJECT)||device.getButtonState(TOGGLE_FILTER_CONTROL)||device.getError()) || (device.getError() && (time < 1000*demo)))
-	{
-		renderer.clearTransform();
-		if(device.getError())
-		{
-			x = 0.6f*float(i++)/float(framerate);
-			y = x;
-/*			switch((i/10)%3)
-			{
-				case 0:
-				{
-					renderer.color4f(1.0f, 0.0f, 0.0f, 1.0f);
-					break;
-				}
-					case 1:
-				{
-					renderer.color4f(0.0f, 1.0f, 0.0f, 1.0f);
-					break;
-				}
-				case 2:
-				{
-					renderer.color4f(0.0f, 0.0f, 1.0f, 1.0f);
-					break;
-				}
-				default:
-					break;
-			}
-*/		}
-=======
 	SDL_Event keyevent;
 	while(!(device.getButtonState(EJECT)||device.getButtonState(TOGGLE_FILTER_CONTROL)||device.getError()) || (device.getError() && (!exit)))
 	{
@@ -184,7 +146,6 @@ int main(int argc, char **argv)
 			else if(keyboard[SDLK_F5] && (currentShader != WIREFRAME_SHADER))
 				renderer.switchToWireframe();
 		}
->>>>>>> 509b30421f90c574540548a4fcd025aea7b1d5a3
 		else
 		{
 			if((abs(device.getSightChangeX()) > 16)||(abs(device.getSightChangeY()) > 16))
@@ -202,11 +163,6 @@ int main(int argc, char **argv)
 				color.z = 1.0f;
 			renderer.color3f(color.x, color.y, color.z);
 
-<<<<<<< HEAD
-			shaderType currentShader = renderer.getShaderType();
-
-=======
->>>>>>> 509b30421f90c574540548a4fcd025aea7b1d5a3
 			if(device.getButtonState(COM1) && (currentShader != PHONG_SHADER))
 				renderer.switchToPhong();
 			else if(device.getButtonState(COM2) && (currentShader != PARALLAX_SHADER))
@@ -239,26 +195,13 @@ int main(int argc, char **argv)
 
 		renderer.setClearColori(device.getLeftPedal(), device.getMiddlePedal(), device.getRightPedal());		// Set the clear color for the screen to a function of the 3 foot pedals
 
-<<<<<<< HEAD
-		renderer.translatef(0.0f, 0.0f, -6.0f);
-=======
 		renderer.translatef(0.0f, 0.0f, -5.0f);
->>>>>>> 509b30421f90c574540548a4fcd025aea7b1d5a3
 		renderer.pushTransform();
 		renderer.rotatef(x, 0.0f, 1.0f, 0.0f);
 		renderer.rotatef(y, 1.0f, 0.0f, 0.0f);
 
 		Crate.getVerts(BASE, 0, vertices, box.numVerts);
 
-<<<<<<< HEAD
-//		for(int i = 0; i < 3; ++i)
-//			for(int j = 0; j < 3; ++j)
-//			{
-//				renderer.translatef(2*i-2, 2*j-2, 0.0f);
-				renderer.push_VBO(box);
-//				renderer.translatef(-2*i+2, -2*j+2, 0.0f);
-//			}
-=======
 		for(int i = 0; i < 3; ++i)
 			for(int j = 0; j < 3; ++j)
 			{
@@ -267,7 +210,6 @@ int main(int argc, char **argv)
 				renderer.push_VBO(box);
 				renderer.translatef(-2*i+2, -2*j+2, 0.0f);
 			}
->>>>>>> 509b30421f90c574540548a4fcd025aea7b1d5a3
 		renderer.DrawScene();
 		if((error = glGetError()))
 			printf("GL_ERROR: %s\n", gluErrorString(error));
