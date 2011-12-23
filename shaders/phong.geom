@@ -36,7 +36,7 @@ void main()
 		eyeVec = vEyeVec[t];
 		TexCoord0 = vTexCoord0[t];
 		for(i=0; i < MAX_LIGHTS; ++i)
-			lightDirs[i] = vec3(lightDir[i] + vEyeVec[0]);
+			lightDirs[i] = vec3(lightDir[i] + vEyeVec[t]);
 		EmitVertex();
 	}
 	EndPrimitive();

@@ -64,12 +64,12 @@ void main (void)
 
 	for(int s = 0; (s < 10) && (abs(texHeight - midHeight) > 0.01); ++s)
 	{
-		if((midHeight - texHeight) > 0.0)
+		if(midHeight > texHeight)
 		{
 			vHi = (vHi + vLo)*0.5;
 			vHeightHi = midHeight;
 		}
-		else if((midHeight - texHeight) < 0.0)
+		else if(midHeight < texHeight)
 		{
 			vLo = (vHi + vLo)*0.5;
 			vHeightLo = midHeight;
@@ -91,85 +91,13 @@ void main (void)
 	vec3 N = normalize(TBN * (normalize(texture2D(normalMap, newTexCoord).xyz * 2.0 - vec3(1.0)))), L;
 
 	// calculate the accumulated light from all 15 potential lights
-	if(0 < numLights)
+	for(int i = 0; i < MAX_LIGHTS; ++i)
 	{
-		lambertTerm += lightColors[0]*max(dot(N,normalize(lightDirs[0])) * 400.0 / pow(distance(lightDirs[0], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[0]*pow(max(dot(N, normalize(normalize(lightDirs[0]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(1 < numLights)
-	{
-		lambertTerm += lightColors[1]*max(dot(N,normalize(lightDirs[1])) * 400.0 / pow(distance(lightDirs[1], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[1]*pow(max(dot(N, normalize(normalize(lightDirs[1]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(2 < numLights)
-	{
-		lambertTerm += lightColors[2]*max(dot(N,normalize(lightDirs[2])) * 400.0 / pow(distance(lightDirs[2], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[2]*pow(max(dot(N, normalize(normalize(lightDirs[2]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(3 < numLights)
-	{
-		lambertTerm += lightColors[3]*max(dot(N,normalize(lightDirs[3])) * 400.0 / pow(distance(lightDirs[3], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[3]*pow(max(dot(N, normalize(normalize(lightDirs[3]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(4 < numLights)
-	{
-		lambertTerm += lightColors[4]*max(dot(N,normalize(lightDirs[4])) * 400.0 / pow(distance(lightDirs[4], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[4]*pow(max(dot(N, normalize(normalize(lightDirs[4]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(5 < numLights)
-	{
-		lambertTerm += lightColors[5]*max(dot(N,normalize(lightDirs[5])) * 400.0 / pow(distance(lightDirs[5], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[5]*pow(max(dot(N, normalize(normalize(lightDirs[5]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(6 < numLights)
-	{
-		lambertTerm += lightColors[6]*max(dot(N,normalize(lightDirs[6])) * 400.0 / pow(distance(lightDirs[6], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[6]*pow(max(dot(N, normalize(normalize(lightDirs[6]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(7 < numLights)
-	{
-		lambertTerm += lightColors[7]*max(dot(N,normalize(lightDirs[7])) * 400.0 / pow(distance(lightDirs[7], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[7]*pow(max(dot(N, normalize(normalize(lightDirs[7]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(8 < numLights)
-	{
-		lambertTerm += lightColors[8]*max(dot(N,normalize(lightDirs[8])) * 400.0 / pow(distance(lightDirs[8], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[8]*pow(max(dot(N, normalize(normalize(lightDirs[8]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(9 < numLights)
-	{
-		lambertTerm += lightColors[9]*max(dot(N,normalize(lightDirs[9])) * 400.0 / pow(distance(lightDirs[9], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[9]*pow(max(dot(N, normalize(normalize(lightDirs[9]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(10 < numLights)
-	{
-		lambertTerm += lightColors[10]*max(dot(N,normalize(lightDirs[10])) * 400.0 / pow(distance(lightDirs[10], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[10]*pow(max(dot(N, normalize(normalize(lightDirs[10]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(11 < numLights)
-	{
-		lambertTerm += lightColors[11]*max(dot(N,normalize(lightDirs[11])) * 400.0 / pow(distance(lightDirs[11], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[11]*pow(max(dot(N, normalize(normalize(lightDirs[11]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(12 < numLights)
-	{
-		lambertTerm += lightColors[12]*max(dot(N,normalize(lightDirs[12])) * 400.0 / pow(distance(lightDirs[12], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[12]*pow(max(dot(N, normalize(normalize(lightDirs[12]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(13 < numLights)
-	{
-		lambertTerm += lightColors[13]*max(dot(N,normalize(lightDirs[13])) * 400.0 / pow(distance(lightDirs[13], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[13]*pow(max(dot(N, normalize(normalize(lightDirs[13]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(14 < numLights)
-	{
-		lambertTerm += lightColors[14]*max(dot(N,normalize(lightDirs[14])) * 400.0 / pow(distance(lightDirs[14], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[14]*pow(max(dot(N, normalize(normalize(lightDirs[14]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
-	}
-	if(15 < numLights)
-	{
-		lambertTerm += lightColors[15]*max(dot(N,normalize(lightDirs[15])) * 400.0 / pow(distance(lightDirs[15], vec3(0.0, 0.0, 0.0)), 2), 0.0);
-		specular += lightColors[15]*pow(max(dot(N, normalize(normalize(lightDirs[15]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
+		if(i < numLights)
+		{
+			lambertTerm += lightColors[i]*max(dot(N,normalize(lightDirs[i])) * 400.0 / pow(distance(lightDirs[i], vec3(0.0, 0.0, 0.0)), 2), 0.0);
+			specular += lightColors[i]*pow(max(dot(N, normalize(normalize(lightDirs[i]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
+		}
 	}
 
 	lambertTerm = min(lambertTerm, 1.0);
