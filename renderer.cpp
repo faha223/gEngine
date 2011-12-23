@@ -147,8 +147,11 @@ bool Renderer::DrawScene()
 	glUniform1i(shaderLightCount, lights.size());
 
 	shaderColor = glGetUniformLocation(currentProg, "color");
+<<<<<<< HEAD
 	glUniform4f(shaderColor, color.x, color.y, color.z, color.w );
 
+=======
+>>>>>>> 509b30421f90c574540548a4fcd025aea7b1d5a3
 
 	if(lights.size() > 0)
 	{
@@ -186,6 +189,10 @@ bool Renderer::DrawScene()
 		glGetFloatv(GL_PROJECTION_MATRIX, Projection);
 		glUniformMatrix4fv(shaderModelview, 1, GL_FALSE, VBOS[i].transform.data);
 		glUniformMatrix4fv(shaderProjection, 1, GL_FALSE, Projection);
+<<<<<<< HEAD
+=======
+		glUniform4f(shaderColor, VBOS[i].color.x, VBOS[i].color.y, VBOS[i].color.z, VBOS[i].color.w );
+>>>>>>> 509b30421f90c574540548a4fcd025aea7b1d5a3
 		glBindBuffer(GL_ARRAY_BUFFER, VBOS[i].handle);		// Bind the VBO
 		glVertexAttribPointer(8, 2, GL_FLOAT, GL_FALSE, 14*sizeof(float), (void *)0);			// Specify the size, type, stride, and offset of the texcoords
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14*sizeof(float), (void *)(2*sizeof(float)));	// tangents
@@ -315,6 +322,10 @@ bool Renderer::push_VBO(const VBObject& vbo)
 {
 	VBOS.push_back(vbo);			// It's ready to be drawn, this is not intended for use with scene objects as it doesn't depend on the camera or world space
 	VBOS[VBOS.size()-1].transform = transforms.totalTransform();
+<<<<<<< HEAD
+=======
+	VBOS[VBOS.size()-1].color = color;
+>>>>>>> 509b30421f90c574540548a4fcd025aea7b1d5a3
 	return true;				// At some point, there will be error checking to prevent using too much video ram
 }
 

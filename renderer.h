@@ -84,6 +84,10 @@ struct VBObject						// A vertex buffer object
 	unsigned int numVerts;				// and a number of vertices
 	shaderType shader;				// and the specifier for which shader to draw this with
 	mat4 transform;
+<<<<<<< HEAD
+=======
+	vector4 color;
+>>>>>>> 509b30421f90c574540548a4fcd025aea7b1d5a3
 	VBObject();					// Constructor
 };
 
