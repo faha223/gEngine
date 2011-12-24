@@ -1,0 +1,25 @@
+This is a readme file.
+
+This project is an extension of the nuRenderer project which adds support for a quaternion based transformation stack, colors,
+more shaders, and meshes (not animated ones yet). 
+
+required libraries:
+	libusb-1.0 (for steelBattalion controller support through libSteelBattalion. precompiled libSteelBattalion included in this project)
+	libSDL-1.2
+	
+also required development and runtime libraries for OpenGL 3.3
+
+To build:
+	type:
+		make x86
+	or
+		make x64
+	depending on your platform. This may require modifying of the files depending on your operating system (library locations, header locations, etc.)
+
+To run:
+	build first.
+	type:
+		./driver32 
+	or
+		./driver64
+	depending on your platform.
