@@ -37,8 +37,8 @@ int main(int argc, char **argv)
 
 	mesh Crate;
 //	if(Crate.load("meshes/crate", renderer))
-//	if(Crate.load("meshes/box", renderer))
-	if(Crate.load("meshes/boxOfDoors", renderer))
+	if(Crate.load("meshes/box", renderer))
+//	if(Crate.load("meshes/boxOfDoors", renderer))
 		printf("Model Crate loaded fine\n");
 	else
 		printf("Error loading model\n");
@@ -73,9 +73,9 @@ int main(int argc, char **argv)
 //	renderer.switchToWireframe();
 
 	// Add a light to the scene (position vector, direction vector, color vector, , type)
-	renderer.add_light(vector3(5.0f, 20.0f, 0.0f), vector3(0.0f, 1.0f, 0.0f), vector3(1.0f, 1.0f, 1.0f), 1.0f, POINT_LIGHT);
+//	renderer.add_light(vector3(5.0f, 20.0f, 0.0f), vector3(0.0f, 1.0f, 0.0f), vector3(1.0f, 1.0f, 1.0f), 1.0f, POINT_LIGHT);
 //	renderer.add_light(vector3(5.0f, 20.0f, 0.0f), vector3(0.0f, 1.0f, 0.0f), vector3(1.0f, 0.8f, 0.5f), 1.0f, POINT_LIGHT);
-//	renderer.add_light(vector3(0.0f, -20.0f, 0.0f), vector3(0.0f, 1.0f, 0.0f), vector3(0.5f, 0.8f, 1.0f), 1.0f, POINT_LIGHT);
+	renderer.add_light(vector3(8.0f, -20.0f, 0.0f), vector3(0.0f, 1.0f, 0.0f), vector3(0.5f, 0.8f, 1.0f), 1.0f, POINT_LIGHT);
 //	renderer.add_light(vector3(0.0f, -20.0f, 0.0f), vector3(0.0f, 1.0f, 0.0f), vector3(0.926f, 0.16f, 0.16f), 1.0f, POINT_LIGHT);
 
 	// make some rotation storing variables
@@ -173,25 +173,26 @@ int main(int argc, char **argv)
 				renderer.switchToGouraudToon();
 			else if(device.getButtonState(COM5) && (currentShader != WIREFRAME_SHADER))
 				renderer.switchToWireframe();
+			for(size_t i = 0; i < 33; ++i)										// if a Button is pressed
+				if(device.getButtonState(ButtonEnum(i)))							//
+					device.setLEDState(ButtonToLED(ButtonEnum(i)), 15, false);				// light up the corresponding LED
+
+			if(device.getButtonState(LEFT_JOY_SIGHT_CHANGE))
+				x = y = 0.0f;
+
+			if(((time = SDL_GetTicks()) - lastRefresh) >= 10)							// If the time since the last time the lights were refreshed is
+			{													// more than 10 milliseconds
+				lastRefresh += (time - lastRefresh) - ((time-lastRefresh)%10);					// Add the correct number of milliseconds to the time (a multiple of 10)
+				device.setRawLEDData(animation[frame++]);							// And increase the animation frame
+				frame %= 45;											// loop back around if we pass 44
+			}
+
+			device.refreshLEDs();											// Push the updated LED values to the controller
 		}
 		if(x >= 6.28f)
 			x -= 6.28f;
 		if(y >= 6.28f)
 			y -= 6.28f;
-		if(device.getButtonState(LEFT_JOY_SIGHT_CHANGE))
-			x = y = 0.0f;
-
-		if(((time = SDL_GetTicks()) - lastRefresh) >= 10)							// If the time since the last time the lights were refreshed is
-		{													// more than 10 milliseconds
-			lastRefresh += (time - lastRefresh) - ((time-lastRefresh)%10);					// Add the correct number of milliseconds to the time (a multiple of 10)
-			device.setRawLEDData(animation[frame++]);							// And increase the animation frame
-			frame %= 45;											// loop back around if we pass 44
-		}
-
-		for(size_t i = 0; i < 33; ++i)										// if a Button is pressed
-			if(device.getButtonState(ButtonEnum(i)))							//
-				device.setLEDState(ButtonToLED(ButtonEnum(i)), 15, false);				// light up the corresponding LED
-		device.refreshLEDs();											// Push the updated LED values to the controller
 
 		renderer.setClearColori(device.getLeftPedal(), device.getMiddlePedal(), device.getRightPedal());		// Set the clear color for the screen to a function of the 3 foot pedals
 
@@ -202,14 +203,14 @@ int main(int argc, char **argv)
 
 		Crate.getVerts(BASE, 0, vertices, box.numVerts);
 
-		for(int i = 0; i < 3; ++i)
-			for(int j = 0; j < 3; ++j)
-			{
-				renderer.color3f(float(i%2), float(j%2), float((i*j)%2));
-				renderer.translatef(2*i-2, 2*j-2, 0.0f);
+//		for(int i = 0; i < 3; ++i)
+//			for(int j = 0; j < 3; ++j)
+//			{
+//				renderer.color3f(float(i%2), float(j%2), float((i*j)%2));
+//				renderer.translatef(2*i-2, 2*j-2, 0.0f);
 				renderer.push_VBO(box);
-				renderer.translatef(-2*i+2, -2*j+2, 0.0f);
-			}
+//				renderer.translatef(-2*i+2, -2*j+2, 0.0f);
+//			}
 		renderer.DrawScene();
 		if((error = glGetError()))
 			printf("GL_ERROR: %s\n", gluErrorString(error));

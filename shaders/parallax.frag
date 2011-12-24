@@ -5,7 +5,7 @@
 #define AMBIENT 0.03
 #define shininess 8.0
 #define scale 0.3
-#define bias 0.15
+#define bias 0.175
 #define steps 5
 
 in vec3 normal, eyeVec, tangent, binormal;
@@ -30,18 +30,14 @@ void main (void)
 	// calculate the tangent, binormal, normal matrix
 	mat3 TBN = mat3(normalize(tangent), normalize(binormal), normalize(normal));
 
-	// The step size for the linear search is (the distance * the z component of the tangent space view vector)/(256)
-	float step = (dist*(transpose(TBN)*eyeVec).z)/(128.0);
+	vec2 newTexCoord = TexCoord0;
 
-	// The delta single shift vector is the xy components of the tangent space view vector multiplied by the step size and scale and divided by the z component of the tangent space view vector
+	float step = (transpose(TBN)*eyeVec).z/(32.0);
 	vec2 delta = vec2(-(transpose(TBN)*eyeVec).x, (transpose(TBN)*eyeVec).y) * (scale * step / ((transpose(TBN) * eyeVec).z));
 
-	// The starting texHeight is the scaled and biased value from the height map and the current texture coordinate
 	float texHeight = texture2D(heightMap, TexCoord0).r * scale - bias;
-	// the starting height is 1/8
 	float height = 0.125;
 
-	vec2 newTexCoord = TexCoord0;
 	for(int p = 0; p < 1.0/step; ++p)
 	{
 		if(texHeight < height)
@@ -50,7 +46,7 @@ void main (void)
 			newTexCoord += delta;
 			texHeight = texture2D(heightMap, newTexCoord).r * scale - bias;
 		}
-	}
+	}	
 
 	vec2 vHi = newTexCoord - delta;
 	vec2 vLo = newTexCoord;
