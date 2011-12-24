@@ -37,8 +37,8 @@ int main(int argc, char **argv)
 
 	mesh Crate;
 //	if(Crate.load("meshes/crate", renderer))
-	if(Crate.load("meshes/box", renderer))
-//	if(Crate.load("meshes/boxOfDoors", renderer))
+//	if(Crate.load("meshes/box", renderer))
+	if(Crate.load("meshes/boxOfDoors", renderer))
 		printf("Model Crate loaded fine\n");
 	else
 		printf("Error loading model\n");
@@ -73,9 +73,9 @@ int main(int argc, char **argv)
 //	renderer.switchToWireframe();
 
 	// Add a light to the scene (position vector, direction vector, color vector, , type)
-//	renderer.add_light(vector3(5.0f, 20.0f, 0.0f), vector3(0.0f, 1.0f, 0.0f), vector3(1.0f, 1.0f, 1.0f), 1.0f, POINT_LIGHT);
+	renderer.add_light(vector3(5.0f, 20.0f, 0.0f), vector3(0.0f, 1.0f, 0.0f), vector3(1.0f, 1.0f, 1.0f), 1.0f, POINT_LIGHT);
 //	renderer.add_light(vector3(5.0f, 20.0f, 0.0f), vector3(0.0f, 1.0f, 0.0f), vector3(1.0f, 0.8f, 0.5f), 1.0f, POINT_LIGHT);
-	renderer.add_light(vector3(8.0f, -20.0f, 0.0f), vector3(0.0f, 1.0f, 0.0f), vector3(0.5f, 0.8f, 1.0f), 1.0f, POINT_LIGHT);
+//	renderer.add_light(vector3(8.0f, -20.0f, 0.0f), vector3(0.0f, 1.0f, 0.0f), vector3(0.5f, 0.8f, 1.0f), 1.0f, POINT_LIGHT);
 //	renderer.add_light(vector3(0.0f, -20.0f, 0.0f), vector3(0.0f, 1.0f, 0.0f), vector3(0.926f, 0.16f, 0.16f), 1.0f, POINT_LIGHT);
 
 	// make some rotation storing variables
