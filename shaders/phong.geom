@@ -24,20 +24,25 @@ out vec3 normal;
 void main()
 {
 	int t, i;
-	for(t = 0; t < 3; ++t)
+	vec3 avgPos = vEyeVec[0] + vEyeVec[1] + vEyeVec[2];
+	vec3 avgNorm = vNormal[0] + vNormal[1] + vNormal[2];
+	if(dot(avgPos, avgNorm) > 0.0)
 	{
-		gl_Position = gl_in[t].gl_Position;
-		tangent = vTangent[t];
-		binormal = vBinormal[t];
-		if((vNormal[0] == vNormal[1])&&(vNormal[1] == vNormal[2]))
-			normal = vNormal[t];
-		else
-			normal = vec3(1.0);
-		eyeVec = vEyeVec[t];
-		TexCoord0 = vTexCoord0[t];
-		for(i=0; i < MAX_LIGHTS; ++i)
-			lightDirs[i] = vec3(lightDir[i] + vEyeVec[t]);
-		EmitVertex();
+		for(t = 0; t < 3; ++t)
+		{
+			gl_Position = gl_in[t].gl_Position;
+			tangent = vTangent[t];
+			binormal = vBinormal[t];
+			if((vNormal[0] == vNormal[1])&&(vNormal[1] == vNormal[2]))
+				normal = vNormal[t];
+			else
+				normal = vec3(1.0);
+			eyeVec = vEyeVec[t];
+			TexCoord0 = vTexCoord0[t];
+			for(i=0; i < MAX_LIGHTS; ++i)
+				lightDirs[i] = vec3(lightDir[i] + vEyeVec[t]);
+			EmitVertex();
+		}
 	}
 	EndPrimitive();
 }

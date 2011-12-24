@@ -11,6 +11,7 @@
 in vec3 normal, eyeVec, tangent, binormal;
 in vec3 lightDirs[MAX_LIGHTS];
 in vec2 TexCoord0;
+in float dist;
 
 uniform int numLights;
 uniform vec3 lightColors[MAX_LIGHTS];
@@ -29,15 +30,11 @@ void main (void)
 	// calculate the tangent, binormal, normal matrix
 	mat3 TBN = mat3(normalize(tangent), normalize(binormal), normalize(normal));
 
-	// And the distance from the camera to the given fragment
-	float dist = distance(eyeVec, vec3(0.0));
-
 	// The step size for the linear search is (the distance * the z component of the tangent space view vector)/(256)
-	float step = (dist*(transpose(TBN)*eyeVec).z)/(256.0);
+	float step = (dist*(transpose(TBN)*eyeVec).z)/(128.0);
 
 	// The delta single shift vector is the xy components of the tangent space view vector multiplied by the step size and scale and divided by the z component of the tangent space view vector
-	vec2 delta = (transpose(TBN) * eyeVec).xy;
-	delta = vec2(-delta.x, delta.y) * (scale * step / ((transpose(TBN) * eyeVec).z));
+	vec2 delta = vec2(-(transpose(TBN)*eyeVec).x, (transpose(TBN)*eyeVec).y) * (scale * step / ((transpose(TBN) * eyeVec).z));
 
 	// The starting texHeight is the scaled and biased value from the height map and the current texture coordinate
 	float texHeight = texture2D(heightMap, TexCoord0).r * scale - bias;

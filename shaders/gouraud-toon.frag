@@ -31,8 +31,8 @@ void main (void)
 	else if((distance(Lambert, vec3(0.0)) > 0.75)&&(distance(Lambert, vec3(0.0)) <= 1.0))
 		l = l * 0.875;
 
-	FragColor = vec4(clamp( final_color.r * color.r * l.r + Specular.r, 0.0, 1.0),
-			 clamp( final_color.g * color.g * l.g + Specular.g, 0.0, 1.0),
-			 clamp( final_color.b * color.b * l.b + Specular.b, 0.0, 1.0),
+	FragColor = vec4(final_color.r * color.r * l.r + Specular.r,
+			 final_color.g * color.g * l.g + Specular.g,
+			 final_color.b * color.b * l.b + Specular.b,
 				final_color.a * color.a);
 }
