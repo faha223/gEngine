@@ -203,14 +203,14 @@ int main(int argc, char **argv)
 
 		Crate.getVerts(BASE, 0, vertices, box.numVerts);
 
-//		for(int i = 0; i < 3; ++i)
-//			for(int j = 0; j < 3; ++j)
-//			{
-//				renderer.color3f(float(i%2), float(j%2), float((i*j)%2));
-//				renderer.translatef(2*i-2, 2*j-2, 0.0f);
+		for(int i = 0; i < 3; ++i)
+			for(int j = 0; j < 3; ++j)
+			{
+				renderer.color3f(float(i%2), float(j%2), float((i*j)%2));
+				renderer.translatef(2*i-2, 2*j-2, 0.0f);
 				renderer.push_VBO(box);
-//				renderer.translatef(-2*i+2, -2*j+2, 0.0f);
-//			}
+				renderer.translatef(-2*i+2, -2*j+2, 0.0f);
+			}
 		renderer.DrawScene();
 		if((error = glGetError()))
 			printf("GL_ERROR: %s\n", gluErrorString(error));
