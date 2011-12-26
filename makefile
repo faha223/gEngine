@@ -48,4 +48,5 @@ driver64: libMesh64.o libRenderer64.o libVector64.o libMatrix64.o libQuaternion6
 clean:
 	rm -f libRenderer*
 	rm -f libMesh*
+	rm -f libSceneGraph*
 	rm -f driver32 driver64
