@@ -34,7 +34,7 @@ void main (void)
 
 	float step = (transpose(TBN)*eyeVec).z/(32.0);
 
-	if(step > 0.001)
+	if(step > 0.002)
 	{
 		vec2 delta = vec2(-(transpose(TBN)*eyeVec).x, (transpose(TBN)*eyeVec).y) * (scale * step / ((transpose(TBN) * eyeVec).z));
 
