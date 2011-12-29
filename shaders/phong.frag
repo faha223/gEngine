@@ -34,9 +34,9 @@ void main (void)
 	float specScale = texture2D(specularMap, TexCoord0).r;
 	vec4 final_color = texture2D(diffuseMap, TexCoord0);
         vec3 N = normalize(TBN * (normalize( texture2D(normalMap, TexCoord0).xyz * 2.0 - vec3(1.0)))), L;
-	for(int i=0; i<MAX_LIGHTS; ++i)
+	for(int i=0; i<numLights; ++i)
 	{
-		if(i < numLights)
+		if(i < MAX_LIGHTS)
 		{
 			lambertTerm += lightColors[i]*max(dot(N,normalize(lightDirs[i])) * 400.0 / pow(distance(lightDirs[i], vec3(0.0, 0.0, 0.0)), 2), 0.0);
 			specular += lightColors[i]*pow(max(dot(N, normalize(normalize(lightDirs[i]) + normalize(eyeVec))), 0.0), shininess)*specScale*MAX_SPECULAR;
