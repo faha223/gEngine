@@ -74,17 +74,15 @@ void main (void)
 	// The final texture coordinate is the midpoint value that gave a height within 0.01 of the correct height
 	newTexCoord = (vHi + vLo)*0.5;
 
-	float silhouette = 1.0;
-	if((newTexCoord.x > 1.0)||(newTexCoord.y > 1.0)||(newTexCoord.x < 0.0)||(newTexCoord.y < 0.0))
-		silhouette = 0.0;
+	float silhouette = (((newTexCoord.x < 0.0)||(newTexCoord.x > 1.0)||(newTexCoord.y < 0.0)||(newTexCoord.y > 1.0))?0.0:1.0);
 
-	vec3 lambertTerm = vec3(AMBIENT) + texture2D(lightMap, newTexCoord).xyz;
+	vec3 lambertTerm = texture2D(lightMap, newTexCoord).xyz;
 	vec3 specular = vec3(0.0);
 	float specScale = texture2D(specularMap, newTexCoord).r;
 	vec4 final_color = texture2D(diffuseMap, newTexCoord);
 	vec3 N = normalize(TBN * (normalize(texture2D(normalMap, newTexCoord).xyz * 2.0 - vec3(1.0)))), L;
 
-	// calculate the accumulated light from all 15 potential lights
+	// calculate the accumulated light from all lights
 	for(int i = 0; i < numLights; ++i)
 	{
 		if(i < MAX_LIGHTS)
@@ -94,7 +92,7 @@ void main (void)
 		}
 	}
 
-	lambertTerm = min(lambertTerm, 1.0);
+	lambertTerm = clamp(lambertTerm, AMBIENT, 1.0);
 	FragColor = vec4(final_color.r * color.r * lambertTerm.r + specular.r,
 			 final_color.g * color.g * lambertTerm.g + specular.g,
 			 final_color.b * color.b * lambertTerm.b + specular.b,
