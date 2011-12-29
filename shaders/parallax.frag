@@ -32,50 +32,47 @@ void main (void)
 
 	vec2 newTexCoord = TexCoord0;
 
-	float step = (transpose(TBN)*eyeVec).z/(32.0);
+	float step = max((transpose(TBN)*eyeVec).z/(32.0), 0.001);
 
-	if(step > 0.002)
+	vec2 delta = vec2(-(transpose(TBN)*eyeVec).x, (transpose(TBN)*eyeVec).y) * (scale * step / ((transpose(TBN) * eyeVec).z));
+
+	float texHeight = texture2D(heightMap, TexCoord0).r * scale - bias;
+	float height = 0.125;
+
+	for(int p = 0; p < 1.0/step; ++p)
 	{
-		vec2 delta = vec2(-(transpose(TBN)*eyeVec).x, (transpose(TBN)*eyeVec).y) * (scale * step / ((transpose(TBN) * eyeVec).z));
-
-		float texHeight = texture2D(heightMap, TexCoord0).r * scale - bias;
-		float height = 0.125;
-
-		for(int p = 0; p < 1.0/step; ++p)
+		if(texHeight < height)
 		{
-			if(texHeight < height)
-			{
-				height -= step;
-				newTexCoord += delta;
-				texHeight = texture2D(heightMap, newTexCoord).r * scale - bias;
-			}
+			height -= step;
+			newTexCoord += delta;
+			texHeight = texture2D(heightMap, newTexCoord).r * scale - bias;
 		}
-
-		vec2 vHi = newTexCoord - delta;
-		vec2 vLo = newTexCoord;
-		float vHeightHi = height + step;
-		float vHeightLo = height;
-		float midHeight = (vHeightHi + vHeightLo)*0.5;
-		texHeight = texture2D(heightMap, (vHi+vLo)*0.5).r*scale-bias;
-
-		for(int s = 0; (s < 10) && (abs(texHeight - midHeight) > 0.01); ++s)
-		{
-			if(midHeight > texHeight)
-			{
-				vHi = (vHi + vLo)*0.5;
-				vHeightHi = midHeight;
-			}
-			else if(midHeight < texHeight)
-			{
-				vLo = (vHi + vLo)*0.5;
-				vHeightLo = midHeight;
-			}
-			midHeight = (vHeightHi + vHeightLo) * 0.5;
-			texHeight = texture2D(heightMap, (vHi+vLo)*0.5).r*scale-bias;
-		}
-		// The final texture coordinate is the midpoint value that gave a height within 0.01 of the correct height
-		newTexCoord = (vHi + vLo)*0.5;
 	}
+
+	vec2 vHi = newTexCoord - delta;
+	vec2 vLo = newTexCoord;
+	float vHeightHi = height + step;
+	float vHeightLo = height;
+	float midHeight = (vHeightHi + vHeightLo)*0.5;
+	texHeight = texture2D(heightMap, (vHi+vLo)*0.5).r*scale-bias;
+
+	for(int s = 0; (s < 10) && (abs(texHeight - midHeight) > 0.01); ++s)
+	{
+		if(midHeight > texHeight)
+		{
+			vHi = (vHi + vLo)*0.5;
+			vHeightHi = midHeight;
+		}
+		else if(midHeight < texHeight)
+		{
+			vLo = (vHi + vLo)*0.5;
+			vHeightLo = midHeight;
+		}
+		midHeight = (vHeightHi + vHeightLo) * 0.5;
+		texHeight = texture2D(heightMap, (vHi+vLo)*0.5).r*scale-bias;
+	}
+	// The final texture coordinate is the midpoint value that gave a height within 0.01 of the correct height
+	newTexCoord = (vHi + vLo)*0.5;
 
 	float silhouette = 1.0;
 	if((newTexCoord.x > 1.0)||(newTexCoord.y > 1.0)||(newTexCoord.x < 0.0)||(newTexCoord.y < 0.0))
