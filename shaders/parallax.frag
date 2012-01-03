@@ -4,9 +4,9 @@
 #define MAX_SPECULAR 1.0
 #define AMBIENT 0.03
 #define shininess 8.0
-#define scale 0.3
-#define bias 0.175
-#define steps 5
+#define scale 0.4
+#define bias 0.2
+#define steps 64.0
 
 in vec3 normal, eyeVec, tangent, binormal;
 in vec3 lightDirs[MAX_LIGHTS];
@@ -32,12 +32,11 @@ void main (void)
 
 	vec2 newTexCoord = TexCoord0;
 
-	float step = max((transpose(TBN)*eyeVec).z/(32.0), 0.001);
-
-	vec2 delta = vec2(-(transpose(TBN)*eyeVec).x, (transpose(TBN)*eyeVec).y) * (scale * step / ((transpose(TBN) * eyeVec).z));
+	float step = max((transpose(TBN)*eyeVec).z/steps, 0.001);
+	vec2 delta = vec2(-(transpose(TBN)*eyeVec).x, (transpose(TBN)*eyeVec).y) * (scale * step / (transpose(TBN)*eyeVec).z);
 
 	float texHeight = texture2D(heightMap, TexCoord0).r * scale - bias;
-	float height = 0.125;
+	float height = bias;
 
 	for(int p = 0; p < 1.0/step; ++p)
 	{
@@ -56,7 +55,7 @@ void main (void)
 	float midHeight = (vHeightHi + vHeightLo)*0.5;
 	texHeight = texture2D(heightMap, (vHi+vLo)*0.5).r*scale-bias;
 
-	for(int s = 0; (s < 10) && (abs(texHeight - midHeight) > 0.01); ++s)
+	for(int s = 0; (s < 32) && (abs(texHeight - midHeight) > 0.01); ++s)
 	{
 		if(midHeight > texHeight)
 		{
