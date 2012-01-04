@@ -35,12 +35,15 @@ int main(int argc, char **argv)
 
 	float *vertices = NULL;
 
-	mesh Crate;
-//	if(Crate.load("meshes/crate", renderer))
-	if(Crate.load("meshes/box", renderer))
+	mesh Crate, Box;
+	if(Crate.load("meshes/crate", renderer))
 		printf("Model Crate loaded fine\n");
 	else
-		printf("Error loading model\n");
+		printf("Error loading Crate\n");
+	if(Box.load("meshes/box", renderer))
+		printf("Model Box loaded fine\n");
+	else
+		printf("Error loading Box\n");
 	VBObject box;				// Make a new VBO
 	box.handle = 0;				// Default value for its handle
 
@@ -144,6 +147,25 @@ int main(int argc, char **argv)
 				renderer.switchToGouraudToon();
 			else if(keyboard[SDLK_F5] && (currentShader != WIREFRAME_SHADER))
 				renderer.switchToWireframe();
+			if(keyboard[SDLK_F7])
+			{
+				box.texture[DIFFUSE_MAP] = Crate.getTexture(DIFFUSE_MAP);
+				box.texture[NORMAL_MAP] = Crate.getTexture(NORMAL_MAP);
+				box.texture[SPECULAR_MAP] = Crate.getTexture(SPECULAR_MAP);
+				box.texture[HEIGHT_MAP] = Crate.getTexture(HEIGHT_MAP);
+				box.texture[LIGHT_MAP] = Crate.getTexture(LIGHT_MAP);
+				box.texture[OCCLUSION_MAP] = Crate.getTexture(OCCLUSION_MAP);
+			}
+			if(keyboard[SDLK_F8])
+			{
+				box.texture[DIFFUSE_MAP] = Box.getTexture(DIFFUSE_MAP);
+				box.texture[NORMAL_MAP] = Box.getTexture(NORMAL_MAP);
+				box.texture[SPECULAR_MAP] = Box.getTexture(SPECULAR_MAP);
+				box.texture[HEIGHT_MAP] = Box.getTexture(HEIGHT_MAP);
+				box.texture[LIGHT_MAP] = Box.getTexture(LIGHT_MAP);
+				box.texture[OCCLUSION_MAP] = Box.getTexture(OCCLUSION_MAP);
+			}
+
 		}
 		else
 		{
