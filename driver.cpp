@@ -37,8 +37,7 @@ int main(int argc, char **argv)
 
 	mesh Crate;
 //	if(Crate.load("meshes/crate", renderer))
-//	if(Crate.load("meshes/box", renderer))
-	if(Crate.load("meshes/boxOfDoors", renderer))
+	if(Crate.load("meshes/box", renderer))
 		printf("Model Crate loaded fine\n");
 	else
 		printf("Error loading model\n");
