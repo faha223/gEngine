@@ -149,6 +149,9 @@ int main(int argc, char **argv)
 				renderer.switchToWireframe();
 			if(keyboard[SDLK_F7])
 			{
+				keyboard[SDLK_F7] = false;
+				Crate.getVerts(BASE, 0, vertices, box.numVerts);
+				glBufferData(GL_ARRAY_BUFFER, 14*box.numVerts*sizeof(float), vertices, GL_STATIC_DRAW);// and allocate its space
 				box.texture[DIFFUSE_MAP] = Crate.getTexture(DIFFUSE_MAP);
 				box.texture[NORMAL_MAP] = Crate.getTexture(NORMAL_MAP);
 				box.texture[SPECULAR_MAP] = Crate.getTexture(SPECULAR_MAP);
@@ -158,6 +161,9 @@ int main(int argc, char **argv)
 			}
 			if(keyboard[SDLK_F8])
 			{
+				keyboard[SDLK_F8] = false;
+				Crate.getVerts(BASE, 0, vertices, box.numVerts);
+				glBufferData(GL_ARRAY_BUFFER, 14*box.numVerts*sizeof(float), vertices, GL_STATIC_DRAW);// and allocate its space
 				box.texture[DIFFUSE_MAP] = Box.getTexture(DIFFUSE_MAP);
 				box.texture[NORMAL_MAP] = Box.getTexture(NORMAL_MAP);
 				box.texture[SPECULAR_MAP] = Box.getTexture(SPECULAR_MAP);
