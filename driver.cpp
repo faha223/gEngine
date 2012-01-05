@@ -162,7 +162,7 @@ int main(int argc, char **argv)
 			if(keyboard[SDLK_F8])
 			{
 				keyboard[SDLK_F8] = false;
-				Crate.getVerts(BASE, 0, vertices, box.numVerts);
+				Box.getVerts(BASE, 0, vertices, box.numVerts);
 				glBufferData(GL_ARRAY_BUFFER, 14*box.numVerts*sizeof(float), vertices, GL_STATIC_DRAW);// and allocate its space
 				box.texture[DIFFUSE_MAP] = Box.getTexture(DIFFUSE_MAP);
 				box.texture[NORMAL_MAP] = Box.getTexture(NORMAL_MAP);
