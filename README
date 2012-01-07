@@ -23,3 +23,10 @@ To run:
 	or
 		./driver64
 	depending on your platform.
+
+
+TODO:
+	Add support for shadow mapping for each light in the scene (FBOs and cube depth maps for point lights, FBOs and 2D depth maps for directional and spotlights)
+	The algorithm is as follows:
+	1. Render all geometry for each VBO to the depth buffer of the FBO for the given lights' shadow map. Write to z-buffer only and NO ANISO
+	2. Render the scene from the camera perspective passing the array of shadow maps to the fragment shader and checking against it to determine if a given light should light the pixel or not
