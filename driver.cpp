@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 
 	float *vertices = NULL;
 
-	mesh Crate, Box;
+	mesh Crate, Box, Doors;
 	if(Crate.load("meshes/crate", renderer))
 		printf("Model Crate loaded fine\n");
 	else
@@ -44,6 +44,10 @@ int main(int argc, char **argv)
 		printf("Model Box loaded fine\n");
 	else
 		printf("Error loading Box\n");
+	if(Doors.load("meshes/boxOfDoors", renderer))
+		printf("Model boxOfDoors loaded fine\n");
+	else
+		printf("Error loading boxOfDoors\n");
 	VBObject box;				// Make a new VBO
 	box.handle = 0;				// Default value for its handle
 
@@ -171,6 +175,18 @@ int main(int argc, char **argv)
 				box.texture[LIGHT_MAP] = Box.getTexture(LIGHT_MAP);
 				box.texture[OCCLUSION_MAP] = Box.getTexture(OCCLUSION_MAP);
 			}
+			if(keyboard[SDLK_F9])
+			{
+				keyboard[SDLK_F9] = false;
+				Doors.getVerts(BASE, 0, vertices, box.numVerts);
+				glBufferData(GL_ARRAY_BUFFER, 14*box.numVerts*sizeof(float), vertices, GL_STATIC_DRAW);// and allocate its space
+				box.texture[DIFFUSE_MAP] = Doors.getTexture(DIFFUSE_MAP);
+				box.texture[NORMAL_MAP] = Doors.getTexture(NORMAL_MAP);
+				box.texture[SPECULAR_MAP] = Doors.getTexture(SPECULAR_MAP);
+				box.texture[HEIGHT_MAP] = Doors.getTexture(HEIGHT_MAP);
+				box.texture[LIGHT_MAP] = Doors.getTexture(LIGHT_MAP);
+				box.texture[OCCLUSION_MAP] = Doors.getTexture(OCCLUSION_MAP);
+			}
 
 		}
 		else
@@ -223,21 +239,21 @@ int main(int argc, char **argv)
 
 		renderer.setClearColori(device.getLeftPedal(), device.getMiddlePedal(), device.getRightPedal());		// Set the clear color for the screen to a function of the 3 foot pedals
 
-		renderer.translatef(0.0f, 0.0f, -5.0f);
+		renderer.translatef(0.0f, 0.0f, -2.0f);
 		renderer.pushTransform();
 		renderer.rotatef(x, 0.0f, 1.0f, 0.0f);
 		renderer.rotatef(y, 1.0f, 0.0f, 0.0f);
 
 		Crate.getVerts(BASE, 0, vertices, box.numVerts);
 
-		for(int i = 0; i < 3; ++i)
-			for(int j = 0; j < 3; ++j)
-			{
-				renderer.color3f(float(i%2), float(j%2), float((i*j)%2));
-				renderer.translatef(2*i-2, 2*j-2, 0.0f);
+//		for(int i = 0; i < 3; ++i)
+//			for(int j = 0; j < 3; ++j)
+//			{
+//				renderer.color3f(float(i%2), float(j%2), float((i*j)%2));
+//				renderer.translatef(2*i-2, 2*j-2, 0.0f);
 				renderer.push_VBO(box);
-				renderer.translatef(-2*i+2, -2*j+2, 0.0f);
-			}
+//				renderer.translatef(-2*i+2, -2*j+2, 0.0f);
+//			}
 		renderer.DrawScene();
 		if((error = glGetError()))
 			printf("GL_ERROR: %s\n", gluErrorString(error));
