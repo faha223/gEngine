@@ -54,6 +54,13 @@ struct light
 	lightType type;					// Stored an enumerator for the type of light
 };
 
+struct textBufferObject
+{
+	float x, y;
+	std::string text;
+	textBufferObject(const float &x, const float &y, const char *text);
+};
+
 class transformStack
 {
 private:
@@ -127,6 +134,7 @@ private:
 	std::vector<VBObject> VBOS;							// Stores all the vertex buffer objects until I have the scenegraph working
 	std::vector<Triangle> TS;							// Stores individual triangles passed to the renderer
 	std::vector<GLuint> textures;							// Stores all the textures currently in use by the program, this is where they get deleted from
+	std::vector<textBufferObject> textBuffer;					// Stores all the text to be drawn to the screen at a given time (drawn without the depth buffer, cleared after each frame)
 	bool OKAY;									// Maintains whether the renderer is in good working order
 	std::vector<light> lights;							// Stores all lights in the current scene
 	GLhandleARB toonShader, phongShader, parallaxShader, gouraudShader, gouraudToonShader, wireframe;		// Stores the handles for the shaders
@@ -221,6 +229,10 @@ public:
 	void color4f(const float &r, const float &g, const float &b, const float &a);
 	// Sets the color we modulate with the geometry drawn after this call until the next call is made. default color at the beginning of every draw is { 1.0f, 1.0f, 1.0f }
 	void color3f(const float &r, const float &g, const float &b);
+	// Adds text to the text buffer to be drawn this frame
+	void drawStringXY(const float &x = 0.0f, const float &y = 0.0f, const char *text = NULL);
+	// Adds text to the text buffer to be drawn this frame
+	void drawStringXYZ(const float &x = 0.0f, const float &y = 0.0f, const float &z = 0.0f, const char *text = NULL);
 };
 
 Renderer &operator <<(Renderer&, const VBObject&);

@@ -43,6 +43,15 @@ bool Renderer::Init(const unsigned short &width, const unsigned short &height, c
 		OKAY = false;
 		return false;
 	}
+	i_error = TTF_Init();
+	if(i_error == -1)
+	{
+		printf("TTF_Init Failed: %s\n", TTF_GetError());
+		TTF_Quit();
+		SDL_Quit();
+		OKAY = false;
+		return false;
+	}
 
 	// Ask the video card what's going on
 	const SDL_VideoInfo* vidcard = SDL_GetVideoInfo();
@@ -77,6 +86,7 @@ bool Renderer::Init(const unsigned short &width, const unsigned short &height, c
 
 	glEnable(GL_DEPTH_TEST);					// Enable the depth test
 	glEnable(GL_TEXTURE_2D);					// Enable texturing
+	glEnable(GL_TEXTURE_CUBE_MAP);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glDepthFunc(GL_LEQUAL);						// Use linear depth testing
@@ -137,6 +147,11 @@ bool Renderer::DrawScene()
 	float Projection[16];
 	glClear(GL_DEPTH_BUFFER_BIT);	// Clear the depth buffer
 	glClear(GL_COLOR_BUFFER_BIT);	// And color buffer
+
+//	GLuint fbtemp = 0;
+//	glGenBuffers(1, &fbtemp);
+//	glBindBuffer(GL_FRAME_BUFFER, fbtemp);
+
 	glLoadIdentity();
 
 	GLint currentProg;
@@ -276,6 +291,32 @@ bool Renderer::DrawScene()
 	VBOS.clear();		// forget the VBOs. They're not leaving graphics memory, we just don't know in advance if we need to draw them next frame
 
 	// I was gonna add in a simple font based FPS ticker, but it got complicated
+	for(size_t i = 0; i < textBuffer.size(); ++i)
+	{
+		// This doesn't work yet. Working on figuring it out
+		TTF_Font *font = NULL;
+		font = TTF_OpenFont("/usr/share/fonts/TTF/FreeMono.ttf", 12);
+		if(font == NULL)
+		{	
+			printf("Failed to load font");
+			return false;
+		}
+		SDL_Rect textLocation = {100, 100, 0, 0};//{int((1.0f + (textBuffer.at(i).x * 2.0f))*float(r_width)), int((1.0f + (textBuffer.at(i).y * 2.0f))*float(r_height)), 0, 0};
+		SDL_Color foregroundColor = {255, 255, 255};
+		SDL_Color backgroundColor = {0, 0, 255};
+		SDL_Surface *textSurface = NULL;
+		textSurface = TTF_RenderText_Shaded(font, textBuffer.at(i).text.c_str(), foregroundColor, backgroundColor);
+		if(textSurface == NULL)
+		{
+			printf("Failed to render text\n");
+			return false;
+		}
+		SDL_BlitSurface(textSurface, NULL, screen, &textLocation);
+		SDL_Flip(screen);
+		SDL_FreeSurface(textSurface);
+		TTF_CloseFont(font);
+	}
+	textBuffer.clear();
 
 	SDL_GL_SwapBuffers();								// swap buffers
 	glFinish();									// and flush to the screen
@@ -525,6 +566,24 @@ int Renderer::add_light(const vector3& position, const vector3& direction, const
 	return 0;
 }
 
+void Renderer::drawStringXY(const float &x, const float &y, const char *text)
+{
+	textBuffer.push_back(textBufferObject(x, y, text));
+}
+
+void Renderer::drawStringXYZ(const float &x, const float &y, const float &z, const char *text)
+{
+	vector4 pos = vector4(x, y, z, 1.0f);
+	float projection[16];
+	glGetFloatv(GL_PROJECTION_MATRIX, projection);
+	mat4 projMatrix = mat4(	projection[0], projection[4], projection[8], projection[12],
+							projection[1], projection[5], projection[9], projection[13],
+							projection[2], projection[6], projection[10], projection[14],
+							projection[3], projection[7], projection[11], projection[15]	);
+	pos = projMatrix*pos;
+	textBuffer.push_back(textBufferObject(pos.x, pos.y, text));
+}
+
 Renderer::~Renderer()		// Close everything and clean up
 {
 	VBOS.clear();		// Clear
@@ -541,6 +600,7 @@ Renderer::~Renderer()		// Close everything and clean up
 		glDeleteBuffers(1, &textures[i]);
 	textures.clear();
 	SDL_FreeSurface(screen);// And return it to the system
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -831,4 +891,11 @@ VBObject::VBObject()
 	texture[2] = 0;
 	texture[3] = 0;
 	texture[4] = 0;
+}
+
+textBufferObject::textBufferObject(const float &x, const float &y, const char* text)
+{
+	this->x = x;
+	this->y = y;
+	this->text = string(text);
 }

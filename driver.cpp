@@ -239,7 +239,7 @@ int main(int argc, char **argv)
 
 		renderer.setClearColori(device.getLeftPedal(), device.getMiddlePedal(), device.getRightPedal());		// Set the clear color for the screen to a function of the 3 foot pedals
 
-		renderer.translatef(0.0f, 0.0f, -2.0f);
+		renderer.translatef(0.0f, 0.0f, -2.5f);
 		renderer.pushTransform();
 		renderer.rotatef(x, 0.0f, 1.0f, 0.0f);
 		renderer.rotatef(y, 1.0f, 0.0f, 0.0f);
@@ -254,6 +254,7 @@ int main(int argc, char **argv)
 				renderer.push_VBO(box);
 //				renderer.translatef(-2*i+2, -2*j+2, 0.0f);
 //			}
+		renderer.drawStringXY(10.0f, 10.0f, "This is a string");
 		renderer.DrawScene();
 		if((error = glGetError()))
 			printf("GL_ERROR: %s\n", gluErrorString(error));
