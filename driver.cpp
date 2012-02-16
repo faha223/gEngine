@@ -222,6 +222,40 @@ int main(int argc, char **argv)
 
 			if(device.getButtonState(LEFT_JOY_SIGHT_CHANGE))
 				x = y = 0.0f;
+			if(device.getButtonState(F1))
+			{
+				Crate.getVerts(BASE, 0, vertices, box.numVerts);
+				glBufferData(GL_ARRAY_BUFFER, 14*box.numVerts*sizeof(float), vertices, GL_STATIC_DRAW);// and allocate its space
+				box.texture[DIFFUSE_MAP] = Crate.getTexture(DIFFUSE_MAP);
+				box.texture[NORMAL_MAP] = Crate.getTexture(NORMAL_MAP);
+				box.texture[SPECULAR_MAP] = Crate.getTexture(SPECULAR_MAP);
+				box.texture[HEIGHT_MAP] = Crate.getTexture(HEIGHT_MAP);
+				box.texture[LIGHT_MAP] = Crate.getTexture(LIGHT_MAP);
+				box.texture[OCCLUSION_MAP] = Crate.getTexture(OCCLUSION_MAP);
+			}
+			if(device.getButtonState(F2))
+			{
+				Box.getVerts(BASE, 0, vertices, box.numVerts);
+				glBufferData(GL_ARRAY_BUFFER, 14*box.numVerts*sizeof(float), vertices, GL_STATIC_DRAW);// and allocate its space
+				box.texture[DIFFUSE_MAP] = Box.getTexture(DIFFUSE_MAP);
+				box.texture[NORMAL_MAP] = Box.getTexture(NORMAL_MAP);
+				box.texture[SPECULAR_MAP] = Box.getTexture(SPECULAR_MAP);
+				box.texture[HEIGHT_MAP] = Box.getTexture(HEIGHT_MAP);
+				box.texture[LIGHT_MAP] = Box.getTexture(LIGHT_MAP);
+				box.texture[OCCLUSION_MAP] = Box.getTexture(OCCLUSION_MAP);
+			}
+			if(device.getButtonState(F3))
+			{
+				Doors.getVerts(BASE, 0, vertices, box.numVerts);
+				glBufferData(GL_ARRAY_BUFFER, 14*box.numVerts*sizeof(float), vertices, GL_STATIC_DRAW);// and allocate its space
+				box.texture[DIFFUSE_MAP] = Doors.getTexture(DIFFUSE_MAP);
+				box.texture[NORMAL_MAP] = Doors.getTexture(NORMAL_MAP);
+				box.texture[SPECULAR_MAP] = Doors.getTexture(SPECULAR_MAP);
+				box.texture[HEIGHT_MAP] = Doors.getTexture(HEIGHT_MAP);
+				box.texture[LIGHT_MAP] = Doors.getTexture(LIGHT_MAP);
+				box.texture[OCCLUSION_MAP] = Doors.getTexture(OCCLUSION_MAP);
+			}
+
 
 			if(((time = SDL_GetTicks()) - lastRefresh) >= 10)							// If the time since the last time the lights were refreshed is
 			{													// more than 10 milliseconds
